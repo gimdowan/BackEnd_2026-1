@@ -15,11 +15,13 @@ public class MyController {
     public String hello() {
         return "Hello World!";
     }
+
     @ResponseBody
     @GetMapping("/introduce")
-    public String introduce(@RequestParam String name) {
+    public String introduce(@RequestParam(required = false, defaultValue = "김도완") String name) {
         return "안녕하세요 제 이름은 " + name + "입니다!";
     }
+
     @ResponseBody
     @GetMapping("/json")
     public Map<String, Object> json() {
