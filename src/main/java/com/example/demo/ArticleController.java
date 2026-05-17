@@ -54,4 +54,16 @@ public class ArticleController {
 
         return ResponseEntity.ok(article);
     }
+    @ResponseBody
+    @DeleteMapping("/article/{id}")
+    public ResponseEntity<Void> deleteArticle(@PathVariable int id) {
+
+        if (!articleStore.containsKey(id)) {
+            return ResponseEntity.notFound().build();
+        }
+
+        articleStore.remove(id);
+
+        return ResponseEntity.noContent().build();
+    }
 }
