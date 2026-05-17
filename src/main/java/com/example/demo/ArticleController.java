@@ -31,6 +31,10 @@ public class ArticleController {
 
         Map<String, Object> article = articleStore.get(id);
 
+        if (article == null) {
+            return ResponseEntity.notFound().build();
+        }
+
         return ResponseEntity.ok(article);
     }
 }
