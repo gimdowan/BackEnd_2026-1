@@ -37,4 +37,21 @@ public class ArticleController {
 
         return ResponseEntity.ok(article);
     }
+
+    @ResponseBody
+    @PutMapping("/article/{id}")
+    public ResponseEntity<Map<String, Object>> updateArticle(
+            @PathVariable int id,
+            @RequestBody Map<String, Object> article) {
+
+        if (!articleStore.containsKey(id)) {
+            return ResponseEntity.notFound().build();
+        }
+
+        article.put("id", id);
+
+        articleStore.put(id, article);
+
+        return ResponseEntity.ok(article);
+    }
 }
