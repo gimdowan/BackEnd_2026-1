@@ -1,22 +1,21 @@
 package com.example.demo;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
-@Controller
+@RestController
+@RequestMapping("/article")
 public class ArticleController {
-    private Map<Integer, Map<String, Object>> articleStore = new HashMap<>();
-    private int nextId = 1;
+    private final Map<Integer, Map<String, Object>> articleStore = new HashMap<>();
+    private final AtomicInteger nextId = new AtomicInteger(1);
 
-    @ResponseBody
-    @PostMapping("/article")
+    @PostMapping()
     public ResponseEntity<Map<String, Object>> createArticle(
             @RequestBody Map<String, Object> article) {
 
-        int id = nextId++;
+        int id = nextId.getAndIncrement();
 
         article.put("id", id);
 
@@ -25,8 +24,7 @@ public class ArticleController {
         return ResponseEntity.status(201).body(article);
     }
 
-    @ResponseBody
-    @GetMapping("/article/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Map<String, Object>> getArticle(@PathVariable int id) {
 
         Map<String, Object> article = articleStore.get(id);
@@ -38,8 +36,7 @@ public class ArticleController {
         return ResponseEntity.ok(article);
     }
 
-    @ResponseBody
-    @PutMapping("/article/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Map<String, Object>> updateArticle(
             @PathVariable int id,
             @RequestBody Map<String, Object> article) {
@@ -54,8 +51,8 @@ public class ArticleController {
 
         return ResponseEntity.ok(article);
     }
-    @ResponseBody
-    @DeleteMapping("/article/{id}")
+
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteArticle(@PathVariable int id) {
 
         if (!articleStore.containsKey(id)) {
