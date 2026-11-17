@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+import java.util.List;
 @RestController
 @RequestMapping("/articles")
 public class ArticleController {
@@ -20,7 +20,10 @@ public class ArticleController {
     public ArticleController(ArticleService articleService) {
         this.articleService = articleService;
     }
-
+    @GetMapping
+    public List<ArticleResponse> getAll() {
+        return articleService.findAll();
+    }
     @PostMapping
     public ResponseEntity<ArticleResponse> create(@RequestBody ArticleRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(articleService.create(request));

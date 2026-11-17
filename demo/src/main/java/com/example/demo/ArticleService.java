@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import org.springframework.stereotype.Service;
+import java.util.List;
 
 @Service
 public class ArticleService {
@@ -12,7 +13,17 @@ public class ArticleService {
         this.articleRepository = articleRepository;
         this.memberRepository = memberRepository;
     }
+    public List<ArticleResponse> findAll() {
+        return articleRepository.findAll().stream()
+                .map(this::toResponse)
+                .toList();
+    }
 
+    public List<ArticleResponse> findAllByBoardId(Long boardId) {
+        return articleRepository.findAllByBoardId(boardId).stream()
+                .map(this::toResponse)
+                .toList();
+    }
     public ArticleResponse findById(Long id) {
         Article article = articleRepository.findById(id);
         if (article == null) {
