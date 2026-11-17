@@ -11,44 +11,44 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @RestController
 @RequestMapping("/articles")
 public class ArticleController {
 
-    private final Map<Long, Article> articles = new HashMap<>();
-    private Long nextId = 1L;
+    private final ArticleService articleService;
+
+    public ArticleController(ArticleService articleService) {
+        this.articleService = articleService;
+    }
 
     @PostMapping
-    public ResponseEntity<Void> create(@RequestBody Article article) {
-        articles.put(nextId, article);
-        nextId++;
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<ArticleResponse> create(@RequestBody ArticleRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(articleService.create(request));
     }
+
     @PutMapping("/{id}")
-    public ResponseEntity<Article> update(@PathVariable Long id, @RequestBody Article request) {
-        Article article = articles.get(id);
-        if (article == null) {
+    public ResponseEntity<ArticleResponse> update(@PathVariable Long id, @RequestBody ArticleRequest request) {
+        ArticleResponse response = articleService.update(id, request);
+        if (response == null) {
             return ResponseEntity.notFound().build();
         }
-        article.setDescription(request.getDescription());
-        return ResponseEntity.ok(article);
+        return ResponseEntity.ok(response);
     }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        if (articles.remove(id) == null) {
+        if (!articleService.delete(id)) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.noContent().build();
     }
+
     @GetMapping("/{id}")
-    public ResponseEntity<Article> get(@PathVariable Long id) {
-        Article article = articles.get(id);
-        if (article == null) {
+    public ResponseEntity<ArticleResponse> get(@PathVariable Long id) {
+        ArticleResponse response = articleService.findById(id);
+        if (response == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(article);
+        return ResponseEntity.ok(response);
     }
 }
