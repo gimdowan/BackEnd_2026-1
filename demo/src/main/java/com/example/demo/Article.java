@@ -1,7 +1,5 @@
 package com.example.demo;
 
-public class Article package com.example.demo;
-
 import java.time.LocalDateTime;
 
 public class Article {

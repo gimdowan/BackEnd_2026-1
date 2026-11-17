@@ -29,4 +29,15 @@ public class ArticleRepository {
 
     public List<Article> findAllByBoardId(Long boardId) {
         return findAll().stream()
-                .filter(article -> articlㅁ
+                .filter(article -> article.getBoardId().equals(boardId))
+                .toList();
+    }
+
+    public Article findById(Long id) {
+        return articles.get(id);
+    }
+
+    public Article delete(Long id) {
+        return articles.remove(id);
+    }
+}

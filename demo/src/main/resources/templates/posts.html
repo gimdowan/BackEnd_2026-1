@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>게시판</title>
+</head>
+<body>
+<div th:text="${boardName}">자유게시판</div>
+
+<div th:each="article : ${articles}">
+    <h2 th:text="${article.title}">제목</h2>
+    <p>
+        <span th:text="${article.author}">회원</span> |
+        <span th:text="${#temporals.format(article.date, 'yyyy-MM-dd')}">날짜</span><br>
+        <span th:text="${article.content}">내용</span>
+    </p>
+</div>
+</body>
+</html>
